@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class SettingsScreen extends StatefulWidget {
   final int workTime;
   final int breakTime;
-  Duration durationWorkTime = const Duration(minutes: 25);
-  Duration durationBreakTime = const Duration(minutes: 5);
+  final Duration durationWorkTime = const Duration(minutes: 25);
+  final Duration durationBreakTime = const Duration(minutes: 5);
 
   SettingsScreen({super.key, required this.workTime, required this.breakTime});
 
