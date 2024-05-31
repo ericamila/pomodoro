@@ -24,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   int _workTime = defaultWorkTime;
   int _breakTime = defaultBreakTime;
+  ///TODO
+  String _text = 'Aperte o play!';
 
   @override
   void initState() {
