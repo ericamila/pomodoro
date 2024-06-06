@@ -44,10 +44,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(32.0),
         child: Column(children: <Widget>[
           Text('Tempo de trabalho (minutos)'),
-          textFild(controller: _workTimeController),
+          Semantics(
+            label: 'Tempo de trabalho (minutos)',
+            child: textFild(controller: _workTimeController),
+          ),
           SizedBox(height: 20),
           Text('Tempo de intervalo (minutos)'),
-          textFild(controller: _breakTimeController, exemple: 'ex.: 05'),
+          Semantics(
+            label: 'Tempo de intervalo (minutos)',
+            child:
+                textFild(controller: _breakTimeController, exemple: 'ex.: 05'),
+          ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: _save,
@@ -72,6 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     String exemple = 'ex.: 25',
   }) {
     return CupertinoTextField(
+      padding: EdgeInsets.all(10),
       controller: controller,
       placeholder: exemple,
       keyboardType: TextInputType.number,

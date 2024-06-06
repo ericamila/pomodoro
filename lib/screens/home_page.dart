@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   int _workTime = defaultWorkTime;
   int _breakTime = defaultBreakTime;
+
   ///TODO
   String _text = 'Aperte o play!';
 
@@ -105,6 +106,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('POMODORO'),
         actions: [
           IconButton(
+            tooltip: 'Configurações',
             icon: Icon(Icons.settings),
             onPressed: () async {
               final result = await Navigator.push(
@@ -146,12 +148,15 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(fontSize: 18, color: AppColor.carvao),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        _formatTime(_remainingTime),
-                        style: TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.carvao),
+                      Semantics(
+                        label: 'Tempo restante: ${_formatTime(_remainingTime)}',
+                        child: Text(
+                          _formatTime(_remainingTime),
+                          style: TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.carvao),
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -160,14 +165,19 @@ class _HomePageState extends State<HomePage> {
                           ElevatedButton(
                             onPressed: _isRunning ? _stopTimer : _startTimer,
                             child: Icon(
-                                _isRunning ? Icons.pause : Icons.play_arrow,
-                                size: 40),
+                              _isRunning ? Icons.pause : Icons.play_arrow,
+                              size: 40,
+                              semanticLabel: 'play/pause',
+                            ),
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
                             onPressed: _resetTimer,
-                            child: const Icon(Icons.restart_alt_outlined,
-                                size: 40),
+                            child: const Icon(
+                              Icons.restart_alt_outlined,
+                              size: 40,
+                              semanticLabel: 'restart',
+                            ),
                           ),
                         ],
                       ),
