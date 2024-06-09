@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   int _breakTime = defaultBreakTime;
 
   ///TODO
-  String _text = 'Aperte o play!';
+  String _text = 'Aperte o play para iniciar!';
 
   @override
   void initState() {
@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _startTimer() {
+    _text = _isWorking ? 'Contando...' : 'Intervalo';
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime > 0) {
@@ -73,6 +74,7 @@ class _HomePageState extends State<HomePage> {
     }
     setState(() {
       _isRunning = false;
+      _text = 'Aperte o play para contiruar\nou reset para reiniciar!';
     });
   }
 
@@ -80,6 +82,7 @@ class _HomePageState extends State<HomePage> {
     _stopTimer();
     setState(() {
       _remainingTime = _isWorking ? _workTime : _breakTime;
+      _text = 'Aperte o play para iniciar!';
     });
   }
 
@@ -144,8 +147,9 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        _isWorking ? 'Contando...' : 'Intervalo',
+                        _text,
                         style: TextStyle(fontSize: 18, color: AppColor.carvao),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
                       Semantics(
@@ -155,7 +159,9 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
-                              color: AppColor.carvao),
+                              color: _remainingTime < 60
+                                  ? AppColor.vermelho
+                                  : AppColor.carvao),
                         ),
                       ),
                       const SizedBox(height: 20),
