@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pomodoro/screens/home_page.dart';
 import 'package:pomodoro/theme.dart';
 
@@ -14,7 +13,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
     },);
@@ -22,7 +21,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
