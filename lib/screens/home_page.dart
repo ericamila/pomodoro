@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   static const int defaultWorkTime = 25 * 60; // 25 minutes in seconds
   static const int defaultBreakTime = 5 * 60; // 5 minutes in seconds
 
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   String? _notificationSoundUri;
 
   int feed = 1;
+  late AnimationController _animacao;
 
   List<Map<String, String>> _ringtones = [];
   String? defaultSound; //
@@ -36,8 +38,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    _animacao =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
     _loadPreferences();
     _remainingTime = _workTime;
+  }
+
+  toggle() {
+    _isRunning = !_isRunning;
+    _isRunning ? _animacao.forward() : _animacao.reverse();
   }
 
   Future<void> _loadPreferences() async {
@@ -92,17 +102,16 @@ class _HomePageState extends State<HomePage> {
         }
       });
     });
-    setState(() {
-      _isRunning = true;
-    });
+    toggle();
   }
 
   void _stopTimer() {
     if (_timer.isActive) {
       _timer.cancel();
     }
+    _isRunning = true;
     setState(() {
-      _isRunning = false;
+      toggle();
       feed = 4;
     });
   }
@@ -168,21 +177,21 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Container(
+            alignment: Alignment.center,
             width: double.infinity,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('assets/tomate.png'), opacity: 0.4)),
             child: Stack(
               children: [
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      feedback(feed),
-                      const SizedBox(height: 8),
-                      Semantics(
-                        label: 'Tempo restante: ${_formatTime(_remainingTime)}',
-                        child: Text(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    feedback(feed),
+                    Column(
+                      children: [
+                        Text(
                           _formatTime(_remainingTime),
                           style: TextStyle(
                               fontSize: 48,
@@ -190,34 +199,36 @@ class _HomePageState extends State<HomePage> {
                               color: _remainingTime < 60
                                   ? AppColor.vermelho
                                   : AppColor.carvao),
+                          semanticsLabel:
+                              'Tempo restante: ${_formatTime(_remainingTime)}',
+                        ),
+                        IconButton(
+                          padding: EdgeInsets.all(32),
+                          onPressed: _isRunning ? _stopTimer : _startTimer,
+                          icon: AnimatedIcon(
+                              icon: AnimatedIcons.play_pause,
+                              color: AppColor.vermelho,
+                              progress: _animacao),
+                          iconSize: 136,
+                          tooltip: 'play/pause',
+                        ),
+                      ],
+                    ),
+                    Semantics(
+                      label: 'restart',
+                      child: TextButton(
+                        onPressed: _resetTimer,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.restart_alt_outlined, size: 40),
+                            const Text('Reiniciar'),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          ElevatedButton(
-                            onPressed: _isRunning ? _stopTimer : _startTimer,
-                            child: Icon(
-                              _isRunning ? Icons.pause : Icons.play_arrow,
-                              size: 40,
-                              semanticLabel: 'play/pause',
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: _resetTimer,
-                            child: const Icon(
-                              Icons.restart_alt_outlined,
-                              size: 40,
-                              semanticLabel: 'restart',
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -232,21 +243,23 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            texto('Aperte o '),
+            texto('\nAperte o '),
             Icon(Icons.play_arrow),
-            texto(' para iniciar!'),
+            texto('\n para iniciar!'),
           ],
         );
       case 2:
-        return texto('Executando...');
+        return texto('\nExecutando...');
       case 3:
-        return texto('Intervalo');
+        return texto('\nIntervalo');
       case 4:
         return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   texto('Aperte '),
