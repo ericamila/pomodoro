@@ -3,10 +3,10 @@ description: "App Pomodoro."
 
 publish_to: 'none'
 
-version: 4.0.1+4
+version: 4.1.0+7
 
 environment:
-  sdk: '>=3.4.0 <4.0.0'
+  sdk: ^3.8.0
 
 
 dependencies:
@@ -16,12 +16,12 @@ dependencies:
   cupertino_icons: ^1.0.6
   audioplayers: ^6.0.0
   shared_preferences: ^2.2.3
-  just_audio: ^0.9.38
+  just_audio: ^0.10.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
 
 flutter_launcher_icons:
   android: true
